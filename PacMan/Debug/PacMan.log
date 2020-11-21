@@ -1,5 +1,5 @@
 ﻿  PacMan.cpp
-C:\prog\github\PacMan\PacMan\PacMan.cpp(175,17): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
-C:\prog\github\PacMan\PacMan\PacMan.cpp(43): warning C4715: PacMan::EditDirectionForPacman: значение возвращается не при всех путях выполнения
+C:\prog\github\PacMan\PacMan\PacMan.cpp(213,17): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
 C:\prog\github\PacMan\PacMan\PacMan.cpp(62): warning C4715: PacMan::ProcessCellAfterMove: значение возвращается не при всех путях выполнения
+C:\prog\github\PacMan\PacMan\PacMan.cpp(43): warning C4715: PacMan::EditDirectionForPacman: значение возвращается не при всех путях выполнения
   PacMan.vcxproj -> C:\prog\github\PacMan\PacMan\Debug\PacMan.exe
