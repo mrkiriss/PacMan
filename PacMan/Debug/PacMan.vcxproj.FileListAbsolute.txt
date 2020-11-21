@@ -1,0 +1,2 @@
+C:\prog\github\PacMan\PacMan\Debug\PacMan.exe
+C:\prog\github\PacMan\PacMan\Debug\PacMan.pdb
