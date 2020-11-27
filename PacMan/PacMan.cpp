@@ -62,7 +62,7 @@ namespace PacMan {
 	}
 
 	//функция, отвечающая за движение Pacman'а {кооордината по Ох , координата по Оу, указатель на карту, новое направление, старое направление, массивы координат пакмана и призраков}
-	int MovePacMan(int* x, int* y, char** map, char direction_new, char *direction_old, int *X, int *Y) {
+	int MovePacMan(int* x, int* y, char** map, char direction_new, char* direction_old, int* X, int* Y) {
 
 		char object_name = 'p'; // присвоение имени по id
 
@@ -86,6 +86,19 @@ namespace PacMan {
 
 		if (*x == x_new and *y == y_new) return 0; // PacMan стоит на месте
 
+		if ((y_new == 14 && x_new == -1) || (y_new == 14 && x_new == 28)) { // телепортация
+			map[*y][*x] = ' ';
+			if (x_new == -1) { // телепортация пакмэна
+				*x = 27;
+				map[14][27] = 'p';
+			}
+			else {
+				*x = 0;
+				map[14][0] = 'p';
+			}
+			return 4;
+		}
+
 		if (map[y_new][x_new] != 'w') { // клетка по новому направлению доступна (это не стена)
 			rtrn = ProcessCellAfterMove(y_new, x_new, map, X, Y);
 			map[y_new][x_new] = object_name;
@@ -108,6 +121,8 @@ namespace PacMan {
 				--x_new;
 				break;
 			}
+
+			if ((y_new == 14 && x_new == -1) || (y_new == 14 && x_new == 28)) return 4;  // телепортация
 
 			if (*x == x_new and *y == y_new) return 0; // PacMan стоит на месте
 
@@ -223,6 +238,13 @@ int main(int argc, char* argv[])
 	setlocale(LC_ALL, "Russian_Russia.1251");
 	std::srand(time(NULL));
 
+	CONSOLE_CURSOR_INFO curs = { 0 };
+	curs.dwSize = sizeof(curs);
+	curs.bVisible = FALSE;
+	::SetConsoleCursorInfo(::GetStdHandle(STD_OUTPUT_HANDLE), &curs);
+
+
+
 	//переменные карты
 		COORD position;
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -294,6 +316,7 @@ int main(int argc, char* argv[])
 		set<int> absorb_ghosts;
 
 	long number_of_iteration = 0;
+
 	//PacMan::DrawMap(map, height, width, array_of_coordinates_X, array_of_coordinates_Y); // вывод карты в консоль
 	while (1) {
 		PacMan::DrawMap(map, height, width, array_of_coordinates_X, array_of_coordinates_Y); // вывод карты в консоль
@@ -317,22 +340,8 @@ int main(int argc, char* argv[])
 			score+=10;
 			break;
 		case 2:
-			rage += 25;
+			rage += 75;
 			break;
-			/*
-		case 3:
-			if (rage == 0) {
-				COORD position;
-				position.X = 100;
-				position.Y = 30;
-				HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-				SetConsoleCursorPosition(hConsole, position);
-				cout << "Ты был съеден. Игра закончена. Твой счёт: " << score << endl;
-				position.X = 0;
-				position.Y = 63;
-				SetConsoleCursorPosition(hConsole, position);
-				exit(0);
-			}*/
 		}
 
 		for (int id = 1; id < number_gosts+1; id++) {
@@ -409,6 +418,17 @@ int main(int argc, char* argv[])
 		number_of_iteration++;
 		if (rage>0) rage--;
 
+		if (score == 5000) { // абсолютная победа по счёту
+			position.X = 100;
+			position.Y = 30;
+			SetConsoleCursorPosition(hConsole, position);
+			cout << "Абсолютная победа. Набрано максимально возможное число очков: 5000]" << endl;
+			position.X = 0;
+			position.Y = 63;
+			SetConsoleCursorPosition(hConsole, position);
+			exit(0);
+		}
+
 		//Вывод пользовательской информации
 		position.X = 100;
 		position.Y = 28;
@@ -423,7 +443,7 @@ int main(int argc, char* argv[])
 		position.X = 100;
 		position.Y = 31;
 		SetConsoleCursorPosition(hConsole, position);
-		cout << "Оставшееся время ярости: " << rage << endl;
+		cout << "Оставшееся время ярости: " << int(rage / 100) << int(rage / 10) % 10 << rage % 10 << endl;
 		
 		// блокировка входов центральной клетки
 		if (number_of_iteration == 100) {
