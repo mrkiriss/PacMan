@@ -1,5 +1,10 @@
-﻿// PacMan.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
+﻿
+
+
+//https://github.com/mrkiriss/PacMan.git
+
+
+
 #include <stdio.h>
 #include <conio.h>
 //#include <curses.h>
